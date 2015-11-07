@@ -1,6 +1,11 @@
+import static org.junit.Assert.*;
+import org.junit.Test;
 
+// TODO: performance tests
 public class TrieTest {
-	public static void main(String[] args) {
+
+	@Test
+	public void test() {
 		Trie<Integer> trie = new Trie<Integer>(128);
 
 		trie.put("abc", 1);
@@ -9,21 +14,21 @@ public class TrieTest {
 		trie.put("bfg", 4);
 		trie.put("bfz", 5);
 
-		assert trie.hasPrefix("a");
-		assert trie.hasPrefix("ab");
-		assert trie.hasPrefix("abd");
-		assert trie.hasPrefix("abz") == false;
+		assertTrue(trie.hasPrefix("a"));
+		assertTrue(trie.hasPrefix("ab"));
+		assertTrue(trie.hasPrefix("abd"));
+		assertFalse(trie.hasPrefix("abz"));
 
-		assert trie.get("abc") == 1;
-		assert trie.get("abd") == 2;
-		assert trie.get("bcd") == 3;
-		assert trie.get("bfg") == 4;
-		assert trie.get("bfz") == 5;
-		assert trie.get("abx") == null;
-		assert trie.get("a") == null;
-		assert trie.get("") == null;
+		assertEquals(1, (int)trie.get("abc"));
+		assertEquals(2, (int)trie.get("abd"));
+		assertEquals(3, (int)trie.get("bcd"));
+		assertEquals(4, (int)trie.get("bfg"));
+		assertEquals(5, (int)trie.get("bfz"));
+		assertNull(trie.get("abx"));
+		assertNull(trie.get("a"));
+		assertNull(trie.get(""));
 
 		trie.put("", 10);
-		assert trie.get("") == 10;
+		assertEquals(10, (int)trie.get(""));
 	}
 }
