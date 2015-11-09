@@ -4,6 +4,7 @@ import java.util.*;
 public class PairingHeap<K extends Comparable<K>, V> {
 
 	Node root;
+	int size;
 
 	class Node {
 		K key;
@@ -21,44 +22,65 @@ public class PairingHeap<K extends Comparable<K>, V> {
 	}
 
 	public boolean isEmpty() {
-		return true;
+		return size == 0;
 	}
 
 	public int size() {
-		return 0;
+		return size;
 	}
 
 	public K getMaxKey() {
-		return null;
+		if (size == 0) throw new NoSuchElementException();
+		return root.key;
 	}
 
 	public V getMaxValue() {
-		return null;
+		if (size == 0) throw new NoSuchElementException();
+		return root.value;
 	}	
 
+	// b under a
+	private void linkUnder(Node a, Node b) {
+		debug("linkUnder", a, b);
+		b.prev = a;
+		b.next = a.child;
+		if (a.child != null) {
+			a.child.prev = b;
+		}
+		a.child = b;
+	}
+
 	public void meld(PairingHeap<K, V> that) {
-		/***/
+		if (that.size == 0) {
+			return;
+		}
+		if (this.size == 0) {
+			this.root = that.root;
+			this.size = that.size;
+			return;
+		}
+		Node a = this.root;
+		Node b = that.root;
+		if (a.key.compareTo(b.key) <= 0) {
+			linkUnder(a, b);
+		} else {
+			linkUnder(b, a);
+			this.root = that.root;
+		}
+		this.size += that.size;
 	}
 
 	public void put(K key, V value) {
 		Node n = new Node(key, value);
 		if (root == null) {
 			root = n;
-			debug("newroot", n);
 		} else if (root.key.compareTo(key) <= 0) {
-			n.prev = root;
-			n.next = root.child;
-			if (root.child != null) {
-				root.child.prev = n;
-			}
-			root.child = n;
-			debug("smaller", n);
+			linkUnder(root, n);
 		} else {
-			n.child = root;
-			root.prev = n;
+			linkUnder(n, root);
 			root = n;
-			debug("bigger", n);
 		}
+		size++;
 	}
 
 	public void decreaseKey(K key, V value) {
@@ -66,7 +88,35 @@ public class PairingHeap<K extends Comparable<K>, V> {
 	}
 
 	public V removeMin() {
-		return root.value;
+		if (size == 0) throw new NoSuchElementException();
+		size--;
+		V ret = root.value;
+		Queue<Node> Q = new ArrayDeque<>();
+		Node c = root.child;
+		while (c != null) {
+			Node next = c.next;
+			c.prev = null;
+			c.next = null;
+			Q.add(c);
+			c = next;
+		} 
+		root = null;
+		if (!Q.isEmpty()) {
+			while (Q.size() > 1) {
+				Node a = Q.remove();
+				Node b = Q.remove();
+				if (a.key.compareTo(b.key) <= 0) {
+					linkUnder(a, b);
+					Q.add(a);
+				} else {
+					linkUnder(b, a);
+					Q.add(b);
+				}
+			}
+			root = Q.remove();
+		}
+		debug("newRoot", root);
+		return ret;
 	}
 
 	public void remove(V value) {
