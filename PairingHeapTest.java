@@ -8,13 +8,13 @@ public class PairingHeapTest {
 	@Test(expected = NoSuchElementException.class)
 	public void testGetMinNoneKey() {
 		PairingHeap<Integer, Character> ph = new PairingHeap<>();
-		ph.getMinKey();
+		ph.elementKey();
 	}
 
 	@Test(expected = NoSuchElementException.class)
 	public void testGetMinNoneValue() {
 		PairingHeap<Integer, Character> ph = new PairingHeap<>();
-		ph.getMinValue();
+		ph.element();
 	}
 
 	@Test
@@ -22,16 +22,16 @@ public class PairingHeapTest {
 		PairingHeap<Integer, Character> ph = new PairingHeap<>();
 		
 		ph.put(5, 'A');
-		assertEquals(5, (int)ph.getMinKey());
-		assertEquals('A', (char)ph.getMinValue());
+		assertEquals(5, (int)ph.elementKey());
+		assertEquals('A', (char)ph.element());
 		
 		ph.put(1, 'B');
-		assertEquals(1, (int)ph.getMinKey());
-		assertEquals('B', (char)ph.getMinValue());		
+		assertEquals(1, (int)ph.elementKey());
+		assertEquals('B', (char)ph.element());		
 		
 		ph.put(7, 'C');
-		assertEquals(1, (int)ph.getMinKey());
-		assertEquals('B', (char)ph.getMinValue());	
+		assertEquals(1, (int)ph.elementKey());
+		assertEquals('B', (char)ph.element());	
 	}
 
 	@Test
@@ -102,18 +102,18 @@ public class PairingHeapTest {
 	}
 
 	@Test
-	public void testRemoveMin() {
+	public void testRemove() {
 		PairingHeap<Integer, Character> ph = new PairingHeap<>();
 		ph.put(5, 'A');
 		ph.put(1, 'B');
 		ph.put(7, 'C');
-		assertEquals((Character)'B', ph.removeMin());
-		assertEquals((Character)'A', ph.removeMin());
-		assertEquals((Character)'C', ph.removeMin());
+		assertEquals((Character)'B', ph.remove());
+		assertEquals((Character)'A', ph.remove());
+		assertEquals((Character)'C', ph.remove());
 	}
 
 	@Test
-	public void testMeldRemoveMin() {
+	public void testMeldRemove() {
 		PairingHeap<Integer, Character> ph1 = new PairingHeap<>();
 		PairingHeap<Integer, Character> ph2 = new PairingHeap<>();
 		ph1.put(5, 'A');
@@ -132,8 +132,8 @@ public class PairingHeapTest {
 		String keys = "";
 		String values = "";
 		for (int i = 0; i < 6; i++) {
-			keys += ph1.getMinKey();
-			values += ph1.removeMin();
+			keys += ph1.elementKey();
+			values += ph1.remove();
 		}
 
 		assertEquals(keys, "014579");
