@@ -1,10 +1,10 @@
 import java.util.*;
 
-public class PairingHeap<E> implements MeldableQueue<E> {
-	Node root;
-	int size;
+public class PairingHeap<E extends Comparable<E>> {
+	private Node root;
+	private int size;
 
-	class Node {
+	private class Node {
 		E element;
 		Node prev;
 		Node next;
@@ -37,53 +37,13 @@ public class PairingHeap<E> implements MeldableQueue<E> {
 		return root.element;
 	}	
 
-	// b becomes leftmost child of a
-	private void linkUnder(Node a, Node b) {
-		b.prev = a;
-		b.next = a.child;
-		if (a.child != null) {
-			a.child.prev = b;
-		}
-		a.child = b;
-	}
-
-	public void meld(MeldableQueue<E> that) {
-		if (that.size == 0) {
-			return;
-		}
-		if (this.size == 0) {
-			this.root = that.root;
-			this.size = that.size;
-			that.size = 0;
-			that.root = null;
-			return;
-		}
-		Node a = this.root;
-		Node b = that.root;
-		if (a.element.compareTo(b.element) <= 0) {
-			linkUnder(a, b);
-		} else {
-			linkUnder(b, a);
-			this.root = that.root;
-		}
-		this.size += that.size;
-		that.size = 0;
-		that.root = null;		
-	}
-
 	public boolean offer(E element) {
-		add(element);
-		return true;
+		return add(element);
 	}
 
 	public boolean add(E element) {
 		Node n = new Node(element);
-		if (root == null) {
-			root = n;
-		} else if (root.element.compareTo(element) <= 0) {
-			linkUnder(root, n);
-		} else {
-			linkUnder(n, root);
+		if (root == null || compareAndLink(root, n)) {
 			root = n;
 		}
 		size++;
@@ -108,22 +68,57 @@ public class PairingHeap<E> implements MeldableQueue<E> {
 			Q.add(c);
 			c = next;
 		} 
-		root = null;
-		if (!Q.isEmpty()) {
-			while (Q.size() > 1) {
-				Node a = Q.remove();
-				Node b = Q.remove();
-				if (a.element.compareTo(b.element) <= 0) {
-					linkUnder(a, b);
-					Q.add(a);
-				} else {
-					linkUnder(b, a);
-					Q.add(b);
-				}
+		while (Q.size() > 1) {
+			Node a = Q.remove();
+			Node b = Q.remove();
+			if (compareAndLink(a, b)) {
+				Q.add(b);	
+			} else { 
+				Q.add(a);
 			}
-			root = Q.remove();
+		}
+		root = Q.poll();
+		return ret;
+	}	
+
+	public void meld(PairingHeap<E> that) {
+		if (that.size == 0) {
+			return;
+		}
+		if (this.size == 0) {
+			this.root = that.root;
+			this.size = that.size;
+			that.size = 0;
+			that.root = null;
+			return;
+		}
+		if (compareAndLink(this.root, that.root)) {
+			this.root = that.root;
+		}
+		this.size += that.size;
+		that.size = 0;
+		that.root = null;		
+	}	
+
+	// b becomes leftmost child of a
+	private void linkUnder(Node a, Node b) {
+		b.prev = a;
+		b.next = a.child;
+		if (a.child != null) {
+			a.child.prev = b;
+		}
+		a.child = b;
+	}
+
+	// return true if b becomes new root
+	private boolean compareAndLink(Node a, Node b) {
+		boolean ret = a.element.compareTo(b.element) > 0;
+		if (ret) {
+			linkUnder(b, a);
+		} else {
+			linkUnder(a, b);
 		}
 		return ret;
-	}
+	}	
 
 }
