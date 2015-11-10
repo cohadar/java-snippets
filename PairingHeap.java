@@ -29,12 +29,12 @@ public class PairingHeap<K extends Comparable<K>, V> {
 		return size;
 	}
 
-	public K getMaxKey() {
+	public K getMinKey() {
 		if (size == 0) throw new NoSuchElementException();
 		return root.key;
 	}
 
-	public V getMaxValue() {
+	public V getMinValue() {
 		if (size == 0) throw new NoSuchElementException();
 		return root.value;
 	}	
@@ -57,6 +57,8 @@ public class PairingHeap<K extends Comparable<K>, V> {
 		if (this.size == 0) {
 			this.root = that.root;
 			this.size = that.size;
+			that.size = 0;
+			that.root = null;
 			return;
 		}
 		Node a = this.root;
@@ -68,6 +70,8 @@ public class PairingHeap<K extends Comparable<K>, V> {
 			this.root = that.root;
 		}
 		this.size += that.size;
+		that.size = 0;
+		that.root = null;		
 	}
 
 	public void put(K key, V value) {
