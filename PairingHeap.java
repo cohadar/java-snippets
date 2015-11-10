@@ -1,24 +1,22 @@
 import java.util.*;
 
-// TODO: make it fit into Queue interface and make MeldableQueue interface
-public class PairingHeap<K extends Comparable<K>, V> {
-
+public class PairingHeap<E> implements MeldableQueue<E> {
 	Node root;
 	int size;
 
 	class Node {
-		K key;
-		V value;
+		E element;
 		Node prev;
 		Node next;
 		Node child;
-		Node(K key, V value) {
-			this.key = key;
-			this.value = value;
+		Node(E element) {
+			this.element = element;
 		}
-		public String toString() {
-			return String.format("key=%d, value='%c'", key, value);
-		}
+	}
+
+	public void clear() {
+		this.root = null;
+		this.size = 0;
 	}
 
 	public boolean isEmpty() {
@@ -29,19 +27,18 @@ public class PairingHeap<K extends Comparable<K>, V> {
 		return size;
 	}
 
-	public K elementKey() {
+	public E element() {
 		if (size == 0) throw new NoSuchElementException();
-		return root.key;
-	}
-
-	public V element() {
-		if (size == 0) throw new NoSuchElementException();
-		return root.value;
+		return root.element;
 	}	
 
-	// b under a
+	public E peek() {
+		if (size == 0) return null;
+		return root.element;
+	}	
+
+	// b becomes leftmost child of a
 	private void linkUnder(Node a, Node b) {
-		debug("linkUnder", a, b);
 		b.prev = a;
 		b.next = a.child;
 		if (a.child != null) {
@@ -50,7 +47,7 @@ public class PairingHeap<K extends Comparable<K>, V> {
 		a.child = b;
 	}
 
-	public void meld(PairingHeap<K, V> that) {
+	public void meld(MeldableQueue<E> that) {
 		if (that.size == 0) {
 			return;
 		}
@@ -63,7 +60,7 @@ public class PairingHeap<K extends Comparable<K>, V> {
 		}
 		Node a = this.root;
 		Node b = that.root;
-		if (a.key.compareTo(b.key) <= 0) {
+		if (a.element.compareTo(b.element) <= 0) {
 			linkUnder(a, b);
 		} else {
 			linkUnder(b, a);
@@ -74,27 +71,34 @@ public class PairingHeap<K extends Comparable<K>, V> {
 		that.root = null;		
 	}
 
-	public void put(K key, V value) {
-		Node n = new Node(key, value);
+	public boolean offer(E element) {
+		add(element);
+		return true;
+	}
+
+	public boolean add(E element) {
+		Node n = new Node(element);
 		if (root == null) {
 			root = n;
-		} else if (root.key.compareTo(key) <= 0) {
+		} else if (root.element.compareTo(element) <= 0) {
 			linkUnder(root, n);
 		} else {
 			linkUnder(n, root);
 			root = n;
 		}
 		size++;
+		return true;
 	}
 
-	public void decreaseKey(K key, V value) {
-
+	public E poll() {
+		if (size == 0) return null;
+		return remove();
 	}
 
-	public V remove() {
+	public E remove() {
 		if (size == 0) throw new NoSuchElementException();
 		size--;
-		V ret = root.value;
+		E ret = root.element;
 		Queue<Node> Q = new ArrayDeque<>();
 		Node c = root.child;
 		while (c != null) {
@@ -109,7 +113,7 @@ public class PairingHeap<K extends Comparable<K>, V> {
 			while (Q.size() > 1) {
 				Node a = Q.remove();
 				Node b = Q.remove();
-				if (a.key.compareTo(b.key) <= 0) {
+				if (a.element.compareTo(b.element) <= 0) {
 					linkUnder(a, b);
 					Q.add(a);
 				} else {
@@ -119,19 +123,7 @@ public class PairingHeap<K extends Comparable<K>, V> {
 			}
 			root = Q.remove();
 		}
-		debug("newRoot", root);
 		return ret;
-	}
-
-	public void remove(V value) {
-
-	}
-
-	static boolean DEBUG = true;
-	
-	static void debug(Object...os) {
-		if (!DEBUG) { return; }
-		System.err.printf("%.65536s\n", Arrays.deepToString(os));
 	}
 
 }
