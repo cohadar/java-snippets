@@ -30,6 +30,7 @@ public class FenwickTree {
 	private void internalUpdate(final int index, int factor, int delta) {
 		assert index > 0 && index <= n;
 		int oldMin = getMin(index);
+		int oldMax = getMax(index);
 		for (int i = index; i <= n; i += (i & -i)) {
 			mul[i] += factor;
 			add[i] += delta;
@@ -38,6 +39,11 @@ public class FenwickTree {
 		if (newValue < oldMin) {
 			for (int i = index; i <= n; i += (i & -i)) {
 				min[i] = newValue;
+			}
+		}
+		if (newValue > oldMax) {
+			for (int i = index; i <= n; i += (i & -i)) {
+				max[i] = newValue;
 			}
 		}
 	}
@@ -63,6 +69,16 @@ public class FenwickTree {
 		}
 		return m;
 	}	
+
+	// @return max(A[1]..A[index])
+	public int getMax(final int index) {
+		assert index > 0 && index <= n;
+		int m = max[index];
+		for (int i = index - (index & -index); i > 0; i -= (i & -i)) {
+			m = Math.max(m, max[i]);
+		}
+		return m;
+	}		
 
 	// @return sum(A[low]..A[high])
 	public int getRangeSum(int low, int high) {

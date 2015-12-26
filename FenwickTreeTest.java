@@ -30,6 +30,13 @@ public class FenwickTreeTest {
 		return min;
 	}
 
+	private int getMax(int[] A, int high) {
+		int max = A[0];
+		for (int i = 1; i <= high; i++) {
+			max = Math.max(max, A[i]);
+		}
+		return max;
+	}
 
 	private void addValueToRange(int[] A, int low, int high, int value) {
 		for (int i = low; i <= high; i++) {
@@ -142,6 +149,16 @@ public class FenwickTreeTest {
 			assertEquals(getMin(A, i), fw.getMin(i + 1));
 		}
 	}
+
+	@Test
+	public void testGetMax() {
+		int n = 500;
+		int[] A = randomArray(n);
+		FenwickTree fw = new FenwickTree(A);	
+		for (int i = 0; i < A.length; i++) {
+			assertEquals(getMax(A, i), fw.getMax(i + 1));
+		}
+	}	
 
 	@Test
 	public void testAbsLE() {
