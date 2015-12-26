@@ -63,6 +63,22 @@ public class FenwickTree {
 		internalUpdate(high, -value, value * high); 
 	}
 
+	// @return min index, where getSum(index) > sum
+	int findHigherSumIndex(int sum) {
+		int low = 1;
+		int high = n + 1;
+		while (low < high) {
+			int mid = (low + high) >>> 1;
+			int midSum = getSum(mid);
+			if (midSum <= sum) {
+				low = mid + 1;
+			} else {
+				high = mid;
+			}
+		}
+		return high;
+	}	
+
 	// @return A[]
 	public int[] toArray() {
 		int[] A = new int[n];

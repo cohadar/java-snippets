@@ -28,6 +28,16 @@ public class FenwickTreeTest {
 		}
 	}	
 
+	private int findHigherSumIndex(int[] A, int sum) {
+		for (int i = 0, cumul = 0; i < A.length; i++) {
+			cumul += A[i];
+			if (cumul > sum) {
+				return i;
+			}
+		}
+		return A.length;
+	}		
+
 	@Test
 	public void testToArray() { 
 		int n = 2000;
@@ -98,5 +108,38 @@ public class FenwickTreeTest {
 		int[] B = fw.toArray();
 		assertArrayEquals(A, B);
 	}	
+
+	@Test
+	public void testFindHigherValueIndex() {
+		int n = 500;
+		int[] A = randomArray(n);
+		FenwickTree fw = new FenwickTree(A);		
+		for (int i = 0; i < A.length; i++) {
+			int sum = fw.getSum(i + 1);
+			assertEquals(findHigherSumIndex(A, sum) + 1, fw.findHigherSumIndex(sum));
+		}
+		int sum = 10000000;
+		assertEquals(findHigherSumIndex(A, sum) + 1, fw.findHigherSumIndex(sum));
+		sum = -10000000;
+		assertEquals(findHigherSumIndex(A, sum) + 1, fw.findHigherSumIndex(sum));		
+	}	
+
+
+	@Test
+	public void testAbsLE() {
+		int n = 500;
+		int[] A = randomArray(n);
+		FenwickTree fw = new FenwickTree(A);		
+		fw.addValueToRange(1, n, -500);
+		int[] B = fw.toArray();
+		debug(B);		
+	}
+
+	static boolean DEBUG = true;
+	
+	static void debug(Object...os) {
+		if (!DEBUG) { return; }
+		System.err.printf("%.65536s\n", Arrays.deepToString(os));
+	}
 
 }
