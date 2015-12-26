@@ -160,19 +160,4 @@ public class FenwickTreeTest {
 		}
 	}	
 
-	@Test
-	public void testAbsLE() {
-		int n = 500;
-		int[] A = randomArray(n);
-		FenwickTree fw = new FenwickTree(A);		
-		fw.addValueToRange(1, n, -500);
-		int[] B = fw.toArray();	
-		int c1 = 0;
-		for (int i = 0; i < B.length; i++) {
-			if (Math.abs(B[i]) <= 100) {
-				c1++;
-			}
-		}
-	}
-
 }
