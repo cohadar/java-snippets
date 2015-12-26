@@ -1,3 +1,4 @@
+import java.util.Arrays;
 
 /**
 * All indexes in FenwickTree are 1-based.
@@ -5,11 +6,17 @@
 public class FenwickTree {
 	private final int[] add;
 	private final int[] mul;
+	private final int[] min;
+	private final int[] max;
 	private final int n;
 
 	public FenwickTree(int n) {
 		this.add = new int[1 + n];
 		this.mul = new int[1 + n];
+		this.min = new int[1 + n];
+		this.max = new int[1 + n];
+		Arrays.fill(this.min, Integer.MAX_VALUE);
+		Arrays.fill(this.max, Integer.MIN_VALUE);
 		this.n = n;
 	}
 
@@ -20,11 +27,18 @@ public class FenwickTree {
 		}
 	}	
 
-	private void internalUpdate(final int index, int factor, int value) {
+	private void internalUpdate(final int index, int factor, int delta) {
 		assert index > 0 && index <= n;
+		int oldMin = getMin(index);
 		for (int i = index; i <= n; i += (i & -i)) {
 			mul[i] += factor;
-			add[i] += value;
+			add[i] += delta;
+		}
+		int newValue = getValue(index);
+		if (newValue < oldMin) {
+			for (int i = index; i <= n; i += (i & -i)) {
+				min[i] = newValue;
+			}
 		}
 	}
 
@@ -39,6 +53,16 @@ public class FenwickTree {
 		}
 		return fact * index + sum;		
 	}
+
+	// @return min(A[1]..A[index])
+	public int getMin(final int index) {
+		assert index > 0 && index <= n;
+		int m = min[index];
+		for (int i = index - (index & -index); i > 0; i -= (i & -i)) {
+			m = Math.min(m, min[i]);
+		}
+		return m;
+	}	
 
 	// @return sum(A[low]..A[high])
 	public int getRangeSum(int low, int high) {

@@ -22,6 +22,15 @@ public class FenwickTreeTest {
 		return sum;
 	}
 
+	private int getMin(int[] A, int high) {
+		int min = A[0];
+		for (int i = 1; i <= high; i++) {
+			min = Math.min(min, A[i]);
+		}
+		return min;
+	}
+
+
 	private void addValueToRange(int[] A, int low, int high, int value) {
 		for (int i = low; i <= high; i++) {
 			A[i] += value;
@@ -124,6 +133,15 @@ public class FenwickTreeTest {
 		assertEquals(findHigherSumIndex(A, sum) + 1, fw.findHigherSumIndex(sum));		
 	}	
 
+	@Test
+	public void testGetMin() {
+		int n = 500;
+		int[] A = randomArray(n);
+		FenwickTree fw = new FenwickTree(A);	
+		for (int i = 0; i < A.length; i++) {
+			assertEquals(getMin(A, i), fw.getMin(i + 1));
+		}
+	}
 
 	@Test
 	public void testAbsLE() {
@@ -133,6 +151,12 @@ public class FenwickTreeTest {
 		fw.addValueToRange(1, n, -500);
 		int[] B = fw.toArray();
 		debug(B);		
+		int c1 = 0;
+		for (int i = 0; i < B.length; i++) {
+			if (Math.abs(B[i]) <= 100) {
+				c1++;
+			}
+		}
 	}
 
 	static boolean DEBUG = true;
