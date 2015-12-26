@@ -32,13 +32,22 @@ public class BinarySearchTest {
 				assertEquals(indexExpected, indexActual);
 			} else {
 				assertEquals(A[indexExpected], A[indexActual]);
-			}			
+			}
 		}
 	}
 
 	public int upperBound(int[] A, int left, int right, int value) {
 		for (int i = left; i < right; i++) {
 			if (A[i] > value) {
+				return i;
+			}
+		}
+		return right;
+	}
+
+	public int lowerBound(int[] A, int left, int right, int value) {
+		for (int i = left; i < right; i++) {
+			if (A[i] >= value) {
 				return i;
 			}
 		}
@@ -61,8 +70,28 @@ public class BinarySearchTest {
 			assertEquals(indexExpected, indexActual);
 			if (indexExpected >= 0 && indexExpected < A.length) {
 				assertEquals(A[indexExpected], A[indexActual]);
-			}			
+			}
 		}
-	}	
+	}
+
+	@Test
+	public void testLowerBound() {
+		int n = 1000;
+		final int[] A = randomSortedArray(n);
+		BinarySearch bs = new BinarySearch() {
+			public int getValue(int i) {
+				return A[i];
+			}
+		};
+		for (int i = 0; i < 3 * n; i++) {
+			int value = random.nextInt(1000);
+			int indexExpected = lowerBound(A, 0, A.length, value);
+			int indexActual = bs.lowerBound(0, A.length, value);
+			assertEquals(indexExpected, indexActual);
+			if (indexExpected >= 0 && indexExpected < A.length) {
+				assertEquals(A[indexExpected], A[indexActual]);
+			}
+		}
+	}
 
 }

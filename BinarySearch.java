@@ -1,6 +1,6 @@
 
 public abstract class BinarySearch {
-	
+
 	// this MUST be monotonically rising function!
 	public abstract int getValue(int index);
 
@@ -10,9 +10,9 @@ public abstract class BinarySearch {
 		while (left <= right) {
 			int mid = (left + right) >>> 1;
 			int midValue = getValue(mid);
-			if (value == midValue) {
+			if (midValue == value) {
 				return mid;
-			} else if (value < midValue) {
+			} else if (midValue > value) {
 				right = mid - 1;
 			} else {
 				left = mid + 1;
@@ -23,25 +23,32 @@ public abstract class BinarySearch {
 
 	// find first index in [left, right) for which getValue(index) > value
 	public int upperBound(int left, int right, int value) {
-		int off = right;
 		right--;
 		while (left <= right) {
 			int mid = (left + right) >>> 1;
 			int midValue = getValue(mid);
-			if(midValue > value && ( mid == 0 || getValue(mid - 1) <= value )) {
-				return mid;
-			} else if(midValue > value) {
+			if (midValue > value) {
 				right = mid - 1;
 			} else {
 				left = mid + 1;
 			}
 		}
-		return off;
+		return left;
 	}
 
 	// find first index in [left, right) for which getValue(index) >= value
 	public int lowerBound(int left, int right, int value) {
-		return 0;
+		right--;
+		while (left <= right) {
+			int mid = (left + right) >>> 1;
+			int midValue = getValue(mid);
+			if (midValue >= value) {
+				right = mid - 1;
+			} else {
+				left = mid + 1;
+			}
+		}
+		return left;
 	}
 
 }
