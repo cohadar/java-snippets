@@ -166,21 +166,13 @@ public class FenwickTreeTest {
 		int[] A = randomArray(n);
 		FenwickTree fw = new FenwickTree(A);		
 		fw.addValueToRange(1, n, -500);
-		int[] B = fw.toArray();
-		debug(B);		
+		int[] B = fw.toArray();	
 		int c1 = 0;
 		for (int i = 0; i < B.length; i++) {
 			if (Math.abs(B[i]) <= 100) {
 				c1++;
 			}
 		}
-	}
-
-	static boolean DEBUG = true;
-	
-	static void debug(Object...os) {
-		if (!DEBUG) { return; }
-		System.err.printf("%.65536s\n", Arrays.deepToString(os));
 	}
 
 }
