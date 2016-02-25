@@ -30,12 +30,12 @@ public class UpperBound {
 	}	
 
 	public int upperBound(int val, int l, int r) {
-		if (l <= r) {
+		while (l <= r) {
 			int m = (l + r) >>> 1;
 			if (A[m] > val) {
-				return upperBound(val, l, m - 1);
+				r = m - 1;
 			} else {
-				return upperBound(val, m + 1, r);
+				l = m + 1;
 			}
 		}
 		return l;

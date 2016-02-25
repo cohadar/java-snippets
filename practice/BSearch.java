@@ -29,12 +29,12 @@ public class BSearch {
 	}	
 
 	public int bsearch(int val, int l, int r) {
-		if (l <= r) {
+		while (l <= r) {
 			int m = (l + r) >>> 1;
 			if (A[m] > val) {
-				return bsearch(val, l, m - 1);
+				r = m - 1;
 			} else if (A[m] < val) {
-				return bsearch(val, m + 1, r);
+				l = m + 1;
 			} else {
 				return m;
 			}

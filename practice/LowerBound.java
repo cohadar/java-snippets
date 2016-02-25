@@ -30,12 +30,12 @@ public class LowerBound {
 	}	
 
 	public int lowerBound(int val, int l, int r) {
-		if (l <= r) {
+		while (l <= r) {
 			int m = (l + r) >>> 1;
 			if (A[m] >= val) {
-				return lowerBound(val, l, m - 1);
+				r = m - 1;
 			} else {
-				return lowerBound(val, m + 1, r);
+				l = m + 1;
 			}
 		}
 		return l;
