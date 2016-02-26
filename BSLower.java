@@ -1,6 +1,9 @@
 import java.util.*;
 import java.io.*;
 
+/**
+  * Binary search - lower bound
+  */
 public class BSLower {
 
 	// MUST be sorted in asc order.

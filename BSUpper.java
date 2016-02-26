@@ -1,6 +1,9 @@
 import java.util.*;
 import java.io.*;
 
+/**
+  * Binary search - upper bound
+  */
 public class BSUpper {
 
 	// MUST be sorted in asc order.
