@@ -2,61 +2,58 @@ import java.util.*;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
-/**
-  * O(log n) operations on array ranges
-  */
 public class SegmentTreeTest {
 
-	static long sumA(int[] A, int l, int r) {
-		long ret = 0;
-		for (int i = l; i <= r; i++) {
-			ret += A[i];
+	static class SumOP implements SegmentTree.OP {
+		@Override
+		public int zero() {
+			return 0;
 		}
-		return ret;
-	}
-
-	static void setA(int[] A, int i, int val) {
-		A[i] = val;
-	}
-
-	static long sumC(int[] C, int l, int r) {
-		if (l == 0) {
-			return C[r];
-		} else {
-			return C[r] - C[l - 1];
+		@Override
+		public int single(int val) {
+			return val;
+		}
+		@Override
+		public int binary(int va, int vb) {
+			return va + vb;
 		}
 	}
 
-	static void setC(int[] C, int i, int val) {
-		for (int c = i; c < C.length; c++) {
-			C[i] += val;
+	static class MinOP implements SegmentTree.OP {
+		@Override
+		public int zero() {
+			return Integer.MAX_VALUE;
+		}
+		@Override
+		public int single(int val) {
+			return val;
+		}
+		@Override
+		public int binary(int va, int vb) {
+			return (va <= vb) ? va : vb;
+		}
+	}	
+
+	@Test
+	public void test_sum() {
+		int[] A = Arrayz.random(2000, -1000, 1000);
+		SegmentTree ST = new SegmentTree(new SumOP(), A);
+		for (int l = 0; l < A.length; l++) {
+			for (int r = l; r < A.length; r++) {
+				assertEquals(Arrayz.sum(A, l, r), ST.queryRange(l, r));
+			}
 		}
 	}
 
 	@Test
-	public void test() {
-		int[] A = randArray(2000, -1000, 1000);
-		int[] C = cumul(A);
-	}
-
-	static int[] cumul(int[] A) {
-		int[] C = new int[A.length];
-		int cumul = 0;
-		for (int i = 0; i < A.length; i++) {
-			cumul += A[i];
-			C[i] = cumul;
+	public void test_min() {
+		int[] A = Arrayz.random(2000, -1000, 1000);
+		SegmentTree ST = new SegmentTree(new MinOP(), A);
+		for (int l = 0; l < A.length; l++) {
+			for (int r = l; r < A.length; r++) {
+				assertEquals(Arrayz.min(A, l, r), ST.queryRange(l, r));
+			}
 		}
-		return C;
-	}
-
-	static Random random = new Random();
-
-	static int[] randArray(int n, int low, int high) {
-		int[] A = new int[n];
-		for (int i = 0; i < n; i++) {
-			A[i] = low + random.nextInt(high - low + 1);
-		}
-		return A;
-	}
+	}	
 
 }

@@ -30,6 +30,18 @@ public class ArrayzTest {
 	}
 
 	@Test
+	public void test_min() {
+		assertEquals(1, Arrayz.min(new int[] { 2, 3, 4, 1, 5 } ));
+		assertEquals(-7, Arrayz.min(new int[] { 3, -3, 2, 4, -1, -7 } ));
+	}
+
+	@Test
+	public void test_min_range() {
+		assertEquals(1, Arrayz.min(new int[] { 2, 3, 4, 1, 5 }, 1, 3));
+		assertEquals(-3, Arrayz.min(new int[] { 3, -3, 2, 4, -1, -7 }, 0, 3));
+	}
+
+	@Test
 	public void test_cumul() {
 		int[] A = Arrayz.random(2000, -1000, 1000);
 		int[] C = Arrayz.cumul(A);

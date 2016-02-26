@@ -26,6 +26,22 @@ public class Arrayz {
 		return ret;
 	}	
 
+	public static int min(int[] A) {
+		int ret = A[0];
+		for (int i = 1; i < A.length; i++) {
+			ret = Math.min(ret, A[i]);
+		}
+		return ret;
+	}
+
+	public static int min(int[] A, int l, int r) {
+		int ret = A[l];
+		for (int i = l + 1; i <= r; i++) {
+			ret = Math.min(ret, A[i]);
+		}
+		return ret;
+	}		
+
 	// warning: assuming cumul sums will now overflow integer
 	public static int[] cumul(int[] A) {
 		int[] C = new int[A.length];
