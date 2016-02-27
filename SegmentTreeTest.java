@@ -10,10 +10,6 @@ public class SegmentTreeTest {
 			return 0;
 		}
 		@Override
-		public int single(int val) {
-			return val;
-		}
-		@Override
 		public int binary(int va, int vb) {
 			return va + vb;
 		}
@@ -23,10 +19,6 @@ public class SegmentTreeTest {
 		@Override
 		public int zero() {
 			return Integer.MAX_VALUE;
-		}
-		@Override
-		public int single(int val) {
-			return val;
 		}
 		@Override
 		public int binary(int va, int vb) {
@@ -54,6 +46,40 @@ public class SegmentTreeTest {
 				assertEquals(Arrayz.min(A, l, r), ST.queryRange(l, r));
 			}
 		}
+	}	
+
+	Random random = new Random();
+
+	public int nextInt(int low, int high) {
+		return low + random.nextInt(high - low + 1);
+	}
+
+	@Test
+	public void test_updateValue_SumOP() {
+		int[] A = Arrayz.random(2000, -1000, 1000);
+		SegmentTree ST = new SegmentTree(new SumOP(), A);
+		for (int i = 0; i < A.length; i++) {
+			ST.updateValue(i, nextInt(-1000, 1000));
+		}
+		for (int l = 0; l < A.length; l++) {
+			for (int r = l; r < A.length; r++) {
+				assertEquals(Arrayz.sum(A, l, r), ST.queryRange(l, r));
+			}
+		}		
+	}
+
+	@Test
+	public void test_updateValue_MinOP() {
+		int[] A = Arrayz.random(2000, -1000, 1000);
+		SegmentTree ST = new SegmentTree(new MinOP(), A);
+		for (int i = 0; i < A.length; i++) {
+			ST.updateValue(i, nextInt(-1000, 1000));
+		}
+		for (int l = 0; l < A.length; l++) {
+			for (int r = l; r < A.length; r++) {
+				assertEquals(Arrayz.min(A, l, r), ST.queryRange(l, r));
+			}
+		}		
 	}	
 
 }
