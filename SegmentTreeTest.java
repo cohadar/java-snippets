@@ -38,6 +38,20 @@ public class SegmentTreeTest {
 	}
 
 	@Test
+	public void test_sum2() {
+		int[] A = Arrayz.random(2000, -1000, 1000);
+		SegmentTree ST = new SegmentTree(new SumOP(), A.length);
+		for (int i = 0; i < A.length; i++) {
+			ST.updateValue(i, A[i]);
+		}
+		for (int l = 0; l < A.length; l++) {
+			for (int r = l; r < A.length; r++) {
+				assertEquals(Arrayz.sum(A, l, r), ST.queryRange(l, r));
+			}
+		}
+	}	
+
+	@Test
 	public void test_min() {
 		int[] A = Arrayz.random(2000, -1000, 1000);
 		SegmentTree ST = new SegmentTree(new MinOP(), A);
@@ -59,7 +73,9 @@ public class SegmentTreeTest {
 		int[] A = Arrayz.random(2000, -1000, 1000);
 		SegmentTree ST = new SegmentTree(new SumOP(), A);
 		for (int i = 0; i < A.length; i++) {
-			ST.updateValue(i, nextInt(-1000, 1000));
+			int val = nextInt(-1000, 1000);
+			A[i] = val;
+			ST.updateValue(i, val);
 		}
 		for (int l = 0; l < A.length; l++) {
 			for (int r = l; r < A.length; r++) {
@@ -73,7 +89,9 @@ public class SegmentTreeTest {
 		int[] A = Arrayz.random(2000, -1000, 1000);
 		SegmentTree ST = new SegmentTree(new MinOP(), A);
 		for (int i = 0; i < A.length; i++) {
-			ST.updateValue(i, nextInt(-1000, 1000));
+			int val = nextInt(-1000, 1000);
+			A[i] = val;
+			ST.updateValue(i, val);
 		}
 		for (int l = 0; l < A.length; l++) {
 			for (int r = l; r < A.length; r++) {

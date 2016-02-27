@@ -12,16 +12,20 @@ public class SegmentTree {
 	}
 
 	final OP op;
-	final int[] A;
 	final int n;
 	final int[] T;
+
+	public SegmentTree(OP op, int n) {
+		this.op = op;
+		this.n = n;
+		this.T = new int[treeLength(n)];
+	}	
 	
 	public SegmentTree(OP op, int[] A) {
 		this.op = op;
-		this.A = A;
 		this.n = A.length;
-		this.T = new int[treeLength(A.length)];
-		fill(0, n - 1, 0);
+		this.T = new int[treeLength(n)];
+		fill(A, 0, n - 1, 0);
 	}
 
 	private int treeLength(int n) {
@@ -29,13 +33,13 @@ public class SegmentTree {
 		return 2 * (1 << height) - 1;
 	}
 
-	private int fill(int l, int r, int p) {
+	private int fill(int[] A, int l, int r, int p) {
 		if (l == r) {
 			return T[p] = A[l];
 		}
  		int m = (l + r) >>> 1;
- 		int va = fill(l, m, 2 * p + 1);
- 		int vb = fill(m + 1, r, 2 * p + 2);
+ 		int va = fill(A, l, m, 2 * p + 1);
+ 		int vb = fill(A, m + 1, r, 2 * p + 2);
 		return T[p] = op.binary(va, vb);
 	}
 
@@ -61,24 +65,23 @@ public class SegmentTree {
 		return queryRange(l, r, 0, n - 1, 0);
 	}
 
-	private int updateValue(int l, int r, int p, int i) {
+	private int updateValue(int l, int r, int p, int i, int val) {
 		if (i < l || r < i) {
 			return T[p];
 		}
 		if (l == r) {
-			return T[p] = A[l];
+			return T[p] = val;
 		}
  		int m = (l + r) >>> 1;
- 		int va = updateValue(l, m, 2 * p + 1, i);
- 		int vb = updateValue(m + 1, r, 2 * p + 2, i);
+ 		int va = updateValue(l, m, 2 * p + 1, i, val);
+ 		int vb = updateValue(m + 1, r, 2 * p + 2, i, val);
 		return T[p] = op.binary(va, vb);
 	}	
 
 	public void updateValue(int i, int val) {
 		assert 0 <= i;
 		assert i < n;
-		A[i] = val;
-		updateValue(0, n - 1, 0, i);
+		updateValue(0, n - 1, 0, i, val);
 	}
 	
 }
