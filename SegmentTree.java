@@ -13,34 +13,40 @@ public class SegmentTree {
 
 	final OP op;
 	final int n;
+	final int in;
 	final int[] T;
 
 	public SegmentTree(OP op, int n) {
 		this.op = op;
 		this.n = n;
-		this.T = new int[treeLength(n)];
+		this.in = indexLength(n);
+		this.T = new int[2 * in + 1];
+		fill(null);
 	}	
 	
 	public SegmentTree(OP op, int[] A) {
 		this.op = op;
 		this.n = A.length;
-		this.T = new int[treeLength(n)];
-		fill(A, 0, n - 1, 0);
+		this.in = indexLength(n);
+		this.T = new int[2 * in + 1];
+		fill(A);
 	}
 
-	private int treeLength(int n) {
+	private int indexLength(int n) {
 		int height = (int) Math.ceil(Math.log(n) / Math.log(2));
-		return 2 * (1 << height) - 1;
+		return (1 << height) - 1;
 	}
 
-	private int fill(int[] A, int l, int r, int p) {
-		if (l == r) {
-			return T[p] = A[l];
+	private void fill(int[] A) {
+		Arrays.fill(T, op.zero());
+		if (A != null) {
+			for (int i = 0; i < A.length; i++) {
+				T[in + i] = A[i];
+			}
 		}
- 		int m = (l + r) >>> 1;
- 		int va = fill(A, l, m, 2 * p + 1);
- 		int vb = fill(A, m + 1, r, 2 * p + 2);
-		return T[p] = op.binary(va, vb);
+		for (int p = in - 1; p >= 0; p--) {
+			T[p] = op.binary(T[2 * p + 1], T[2 * p + 2]);
+		}
 	}
 
 	// warning: assuming OP will now overflow integer
@@ -62,7 +68,7 @@ public class SegmentTree {
 		assert l <= r;
 		assert 0 <= l;
 		assert r < n;
-		return queryRange(l, r, 0, n - 1, 0);
+		return queryRange(l, r, 0, in, 0);
 	}
 
 	private int updateValue(int l, int r, int p, int i, int val) {
@@ -81,7 +87,7 @@ public class SegmentTree {
 	public void updateValue(int i, int val) {
 		assert 0 <= i;
 		assert i < n;
-		updateValue(0, n - 1, 0, i, val);
+		updateValue(0, in, 0, i, val);
 	}
-	
+
 }
