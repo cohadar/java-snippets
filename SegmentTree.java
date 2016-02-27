@@ -20,7 +20,7 @@ public class SegmentTree {
 		this.op = op;
 		this.n = n;
 		this.in = indexLength(n);
-		this.T = new int[2 * in + 1];
+		this.T = new int[2 * in];
 		fill(null);
 	}	
 	
@@ -28,13 +28,25 @@ public class SegmentTree {
 		this.op = op;
 		this.n = A.length;
 		this.in = indexLength(n);
-		this.T = new int[2 * in + 1];
+		this.T = new int[2 * in];
 		fill(A);
 	}
 
+	private static int left(int p) {
+		return 2 * p;
+	}
+
+	private static int right(int p) {
+		return 2 * p + 1;
+	}
+
+	private static int parent(int p) {
+		return p / 2;
+	}	
+
 	private int indexLength(int n) {
 		int height = (int) Math.ceil(Math.log(n) / Math.log(2));
-		return (1 << height) - 1;
+		return 1 << height;
 	}
 
 	private void fill(int[] A) {
@@ -44,8 +56,8 @@ public class SegmentTree {
 				T[in + i] = A[i];
 			}
 		}
-		for (int p = in - 1; p >= 0; p--) {
-			T[p] = op.binary(T[2 * p + 1], T[2 * p + 2]);
+		for (int p = in - 1; p > 0; p--) {
+			T[p] = op.binary(T[left(p)], T[right(p)]);
 		}
 	}
 
@@ -58,8 +70,8 @@ public class SegmentTree {
 			return op.zero();
 		}
 		int m = (sl + sr) >>> 1;
-		int va = queryRange(l, r, sl, m, 2 * p + 1);
-		int vb = queryRange(l, r, m + 1, sr, 2 * p + 2);
+		int va = queryRange(l, r, sl, m, left(p));
+		int vb = queryRange(l, r, m + 1, sr, right(p));
 		return op.binary(va, vb);
 	}	
 
@@ -68,7 +80,13 @@ public class SegmentTree {
 		assert l <= r;
 		assert 0 <= l;
 		assert r < n;
-		return queryRange(l, r, 0, in, 0);
+		// int res = 0;
+		// for (l += in, r += in; l <= r; l = parent(l), r = parent(r)) {
+		// 	if (l % 2 == 0) res += T[l++];
+		// 	if (r % 2 == 1) res += T[--r];
+		// }
+		// return res;		
+		return queryRange(l, r, 0, in - 1, 1);
 	}
 
 	public void updateValue(int i, int val) {
@@ -77,10 +95,9 @@ public class SegmentTree {
 		int p = in + i;
 		while (p > 0) {
 			T[p] = val;
-			p = (p - 1) / 2;
-			val = op.binary(T[2 * p + 1], T[2 * p + 2]);
+			p = parent(p);
+			val = op.binary(T[left(p)], T[right(p)]);
 		}
-		T[0] = val;
 	}
 
 }
