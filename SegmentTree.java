@@ -20,7 +20,7 @@ public class SegmentTree {
 		this.op = op;
 		this.n = n;
 		this.in = indexLength(n);
-		this.T = new int[2 * in];
+		this.T = new int[in + n];
 		fill(null);
 	}	
 	
@@ -28,7 +28,7 @@ public class SegmentTree {
 		this.op = op;
 		this.n = A.length;
 		this.in = indexLength(n);
-		this.T = new int[2 * in];
+		this.T = new int[in + n];
 		fill(A);
 	}
 
@@ -57,8 +57,15 @@ public class SegmentTree {
 			}
 		}
 		for (int p = in - 1; p > 0; p--) {
-			T[p] = op.binary(T[left(p)], T[right(p)]);
+			T[p] = op.binary(t(left(p)), t(right(p)));
 		}
+	}
+
+	private int t(int p) {
+		if (p < in + n) {
+			return T[p];
+		}
+		return op.zero();
 	}
 
 	// warning: assuming OP will now overflow integer
