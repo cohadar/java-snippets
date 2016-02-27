@@ -62,31 +62,16 @@ public class SegmentTree {
 	}
 
 	// warning: assuming OP will now overflow integer
-	private int queryRange(int l, int r, int sl, int sr, int p) {
-		if (l <= sl && sr <= r) {
-			return T[p];
-		}
-		if (sr < l || r < sl) {
-			return op.zero();
-		}
-		int m = (sl + sr) >>> 1;
-		int va = queryRange(l, r, sl, m, left(p));
-		int vb = queryRange(l, r, m + 1, sr, right(p));
-		return op.binary(va, vb);
-	}	
-
-	// warning: assuming OP will now overflow integer
 	public int queryRange(int l, int r) {
 		assert l <= r;
 		assert 0 <= l;
-		assert r < n;
-		// int res = 0;
-		// for (l += in, r += in; l <= r; l = parent(l), r = parent(r)) {
-		// 	if (l % 2 == 0) res += T[l++];
-		// 	if (r % 2 == 1) res += T[--r];
-		// }
-		// return res;		
-		return queryRange(l, r, 0, in - 1, 1);
+		assert r < in;
+		int res = op.zero();
+		for (l += in, r += in; l <= r; l = parent(l), r = parent(r)) {
+			if (l % 2 == 1) res = op.binary(res, T[l++]);
+			if (r % 2 == 0) res = op.binary(res, T[r--]);
+		}
+		return res;		
 	}
 
 	public void updateValue(int i, int val) {
