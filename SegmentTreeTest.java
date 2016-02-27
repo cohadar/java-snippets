@@ -26,6 +26,21 @@ public class SegmentTreeTest {
 		}
 	}	
 
+	// non commutative operator, zero still must be commutative.
+	static class LeftOP implements SegmentTree.OP {
+		@Override
+		public int zero() {
+			return Integer.MIN_VALUE;
+		}
+		@Override
+		public int binary(int va, int vb) {
+			if (va == this.zero()) {
+				return vb;
+			}
+			return va;
+		}
+	}
+
 	@Test
 	public void test_sum() {
 		int[] A = Arrayz.random(2000, -1000, 1000);
@@ -58,6 +73,18 @@ public class SegmentTreeTest {
 		for (int l = 0; l < A.length; l++) {
 			for (int r = l; r < A.length; r++) {
 				assertEquals(Arrayz.min(A, l, r), ST.queryRange(l, r));
+			}
+		}
+	}	
+
+	@Test
+	public void test_left() {
+		int[] A = Arrayz.random(2000, -1000, 1000);
+		LeftOP op = new LeftOP();
+		SegmentTree ST = new SegmentTree(op, A);
+		for (int l = 0; l < A.length; l++) {
+			for (int r = l; r < A.length; r++) {
+				assertEquals(A[l], ST.queryRange(l, r));
 			}
 		}
 	}	

@@ -73,12 +73,13 @@ public class SegmentTree {
 		assert l <= r;
 		assert 0 <= l;
 		assert r < in;
-		int res = op.zero();
+		int resl = op.zero();
+		int resr = op.zero();
 		for (l += in, r += in; l <= r; l = parent(l), r = parent(r)) {
-			if (l % 2 == 1) res = op.binary(res, T[l++]);
-			if (r % 2 == 0) res = op.binary(res, T[r--]);
+			if (l % 2 == 1) resl = op.binary(resl, T[l++]);
+			if (r % 2 == 0) resr = op.binary(T[r--], resr);
 		}
-		return res;		
+		return op.binary(resl, resr);		
 	}
 
 	public void updateValue(int i, int val) {
