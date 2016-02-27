@@ -71,23 +71,16 @@ public class SegmentTree {
 		return queryRange(l, r, 0, in, 0);
 	}
 
-	private int updateValue(int l, int r, int p, int i, int val) {
-		if (i < l || r < i) {
-			return T[p];
-		}
-		if (l == r) {
-			return T[p] = val;
-		}
- 		int m = (l + r) >>> 1;
- 		int va = updateValue(l, m, 2 * p + 1, i, val);
- 		int vb = updateValue(m + 1, r, 2 * p + 2, i, val);
-		return T[p] = op.binary(va, vb);
-	}	
-
 	public void updateValue(int i, int val) {
 		assert 0 <= i;
 		assert i < n;
-		updateValue(0, in, 0, i, val);
+		int p = in + i;
+		while (p > 0) {
+			T[p] = val;
+			p = (p - 1) / 2;
+			val = op.binary(T[2 * p + 1], T[2 * p + 2]);
+		}
+		T[0] = val;
 	}
 
 }
