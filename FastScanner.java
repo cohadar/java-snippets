@@ -57,6 +57,38 @@ public class FastScanner {
 		}
 		return (negative) ? -res : res;
 	}
+	public long nextLong() {
+		int c = skipWhitespace();
+		boolean negative = false;
+		if (c == '-') {
+			negative = true;
+			c = read();
+		}
+		long res = 0;
+		while (Character.isDigit(c)) {
+			res = res * 10 + (c - '0');
+			c = read();
+		};
+		if (c != -1) {
+			unread();
+		}
+		return (negative) ? -res : res;
+	}	
+	public String next() {
+		StringBuilder sb = new StringBuilder();
+		int c = skipWhitespace();
+		while (true) {
+			sb.append((char)c);
+			c = read();
+			if (c == -1 || Character.isWhitespace(c)) {
+				break;
+			}
+		};
+		if (c != -1) {
+			unread();
+		}
+		return sb.toString();
+	}		
 	public String nextLine() {
 		StringBuilder sb = new StringBuilder();
 		while (true) {
