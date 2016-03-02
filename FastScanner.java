@@ -1,4 +1,7 @@
-class FastScanner {
+import java.util.*;
+import java.io.*;
+
+public class FastScanner {
 	private final InputStream is;
 	private final byte[] buff = new byte[1024];
 	private int i;
@@ -23,6 +26,12 @@ class FastScanner {
 		}
 		return buff[i++];
 	}
+	private void unread() {
+		i--;
+		if (i < 0) {
+			throw new InputMismatchException("unread");
+		}
+	}
 	private int skipWhitespace() {
 		while (true) {
 			int c = read();
@@ -43,6 +52,27 @@ class FastScanner {
 			res = res * 10 + (c - '0');
 			c = read();
 		};
+		if (c != -1) {
+			unread();
+		}
 		return (negative) ? -res : res;
+	}
+	public String nextLine() {
+		StringBuilder sb = new StringBuilder();
+		while (true) {
+			int c = read();
+			if (c == '\r') {
+				c = read();
+				if (c != '\n' && c != -1) {
+					unread();
+					c = '\n';
+				}
+			}
+			if (c == '\n' || c == -1) {
+				break;
+			}
+			sb.append((char)c);
+		}
+		return sb.toString();
 	}
 }
