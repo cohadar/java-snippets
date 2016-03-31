@@ -9,62 +9,54 @@ public class Trie26<V> {
 	V value;
 	Trie26[] children;
 
+	@SuppressWarnings("unchecked")
 	public V put(String key, V value) {
-		return put(key, value, 0);
+		Trie26<V> T = this;
+		for (int index = 0; index < key.length(); index++) {
+			if (T.children == null) {
+				T.children = new Trie26[26];
+			}				
+			int i = index4char(key.charAt(index));	
+			if (T.children[i] == null) {
+				T.children[i] = new Trie26();
+			}			
+			T = T.children[i];
+		}
+		V ret = T.value;
+		T.value = value;
+		return ret;
 	}	
 
 	@SuppressWarnings("unchecked")
-	private V put(String key, V value, int index) {
-		if (index == key.length()) {
-			V ret = this.value;
-			this.value = value;
-			return ret;
-		}
-		if (this.children == null) {
-			this.children = new Trie26[26];
-		}	
-		int i = index4char(key.charAt(index));	
-		if (this.children[i] == null) {
-			this.children[i] = new Trie26();
-		}
-		return (V)this.children[i].put(key, value, index + 1);
-	}
-
 	public V get(String key) {
-		return get(key, 0);
+		Trie26<V> T = this;
+		for (int index = 0; index < key.length(); index++) {
+			if (T.children == null) {
+				return null;
+			}
+			int i = index4char(key.charAt(index));
+			if (T.children[i] == null) {
+				return null;
+			}
+			T = T.children[i];
+		}
+		return T.value;
 	}
 
 	@SuppressWarnings("unchecked")
-	private V get(String key, int index) {
-		if (index == key.length()) {
-			return this.value;
-		}
-		if (this.children == null) {
-			return null;
-		}
-		int i = index4char(key.charAt(index));	
-		if (this.children[i] == null) {
-			return null;
-		}
-		return (V)this.children[i].get(key, index + 1);
-	}
-
 	public boolean hasPrefix(String key) {
-		return hasPrefix(key, 0);
-	}
-
-	private boolean hasPrefix(String key, int index) {
-		if (index == key.length()) {
-			return true;
+		Trie26<V> T = this;
+		for (int index = 0; index < key.length(); index++) {
+			if (T.children == null) {
+				return false;
+			}
+			int i = index4char(key.charAt(index));
+			if (T.children[i] == null) {
+				return false;
+			}
+			T = T.children[i];
 		}
-		if (this.children == null) {
-			return false;
-		}
-		int i = index4char(key.charAt(index));	
-		if (this.children[i] == null) {
-			return false;
-		}
-		return this.children[i].hasPrefix(key, index + 1);		
+		return true;
 	}
 
 	public static char char4index(int index) {
