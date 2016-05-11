@@ -5,8 +5,8 @@ import org.junit.Test;
 
 public class FastScannerTest {
 
-	private Scanner $(String input) {
-		return new Scanner(new ByteArrayInputStream(input.getBytes()));
+	private FastScanner $(String input) {
+		return new FastScanner(new ByteArrayInputStream(input.getBytes()));
 	}
 
 	@Test
@@ -19,7 +19,7 @@ public class FastScannerTest {
 				sb.append(' ');
 			}
 		}
-		Scanner scanner = $(sb.toString());		
+		FastScanner scanner = $(sb.toString());		
 		for (int a : A) {
 			assertEquals(a, scanner.nextInt());
 		}
@@ -35,7 +35,7 @@ public class FastScannerTest {
 				sb.append(' ');
 			}
 		}
-		Scanner scanner = $(sb.toString());		
+		FastScanner scanner = $(sb.toString());		
 		for (long a : A) {
 			assertEquals(a, scanner.nextLong());
 		}
@@ -43,7 +43,7 @@ public class FastScannerTest {
 
 	@Test 
 	public void test_next() {
-		Scanner scanner = $("trla\nbaba lan   da\njoj\t\tprodje\r\ndan");
+		FastScanner scanner = $("trla\nbaba lan   da\njoj\t\tprodje\r\ndan");
 		assertEquals("trla", scanner.next());
 		assertEquals("baba", scanner.next());
 		assertEquals("lan", scanner.next());
@@ -53,7 +53,7 @@ public class FastScannerTest {
 		assertEquals("dan", scanner.next());
 	}
 
-	private void test_nextLine(Scanner scanner) {
+	private void test_nextLine(FastScanner scanner) {
 		int n = scanner.nextInt();
 		int t = scanner.nextInt();
 		assertEquals(123, n);
@@ -63,7 +63,7 @@ public class FastScannerTest {
 		assertEquals("BB BB", scanner.nextLine());
 	}
 
-	private void test_nextLineFromMid(Scanner scanner) {
+	private void test_nextLineFromMid(FastScanner scanner) {
 		assertEquals(123, scanner.nextInt());
 		assertEquals(456, scanner.nextInt());
 		assertEquals("", scanner.nextLine());
