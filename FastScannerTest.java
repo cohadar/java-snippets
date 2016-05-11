@@ -5,8 +5,8 @@ import org.junit.Test;
 
 public class FastScannerTest {
 
-	private FastScanner $(String input) {
-		return new FastScanner(new ByteArrayInputStream(input.getBytes()));
+	private Scanner $(String input) {
+		return new Scanner(new ByteArrayInputStream(input.getBytes()));
 	}
 
 	@Test
@@ -19,7 +19,7 @@ public class FastScannerTest {
 				sb.append(' ');
 			}
 		}
-		FastScanner scanner = $(sb.toString());		
+		Scanner scanner = $(sb.toString());		
 		for (int a : A) {
 			assertEquals(a, scanner.nextInt());
 		}
@@ -35,7 +35,7 @@ public class FastScannerTest {
 				sb.append(' ');
 			}
 		}
-		FastScanner scanner = $(sb.toString());		
+		Scanner scanner = $(sb.toString());		
 		for (long a : A) {
 			assertEquals(a, scanner.nextLong());
 		}
@@ -43,7 +43,7 @@ public class FastScannerTest {
 
 	@Test 
 	public void test_next() {
-		FastScanner scanner = $("trla\nbaba lan   da\njoj\t\tprodje\r\ndan");
+		Scanner scanner = $("trla\nbaba lan   da\njoj\t\tprodje\r\ndan");
 		assertEquals("trla", scanner.next());
 		assertEquals("baba", scanner.next());
 		assertEquals("lan", scanner.next());
@@ -53,24 +53,45 @@ public class FastScannerTest {
 		assertEquals("dan", scanner.next());
 	}
 
-	private void test_nextLine(FastScanner scanner) {
+	private void test_nextLine(Scanner scanner) {
 		int n = scanner.nextInt();
 		int t = scanner.nextInt();
 		assertEquals(123, n);
 		assertEquals(456, t);
-		scanner.nextLine();
-		assertEquals("AAAA", scanner.nextLine());
-		assertEquals("BBBB", scanner.nextLine());
+		assertEquals("", scanner.nextLine());
+		assertEquals("AA AA", scanner.nextLine());
+		assertEquals("BB BB", scanner.nextLine());
 	}
+
+	private void test_nextLineFromMid(Scanner scanner) {
+		assertEquals(123, scanner.nextInt());
+		assertEquals(456, scanner.nextInt());
+		assertEquals("", scanner.nextLine());
+		assertEquals(555, scanner.nextInt());
+		assertEquals(" 777", scanner.nextLine());
+		assertEquals("AA", scanner.next());
+		assertEquals(" AA", scanner.nextLine());
+		assertEquals("BB BB", scanner.nextLine());
+	}	
 
 	@Test
 	public void test_nextLine() {
-		String NL_MACOSX9 = "123 456\rAAAA\rBBBB";
-		String NL_WINDOWS = "123 456\r\nAAAA\r\nBBBB";
-		String NL_UNIX    = "123 456\nAAAA\nBBBB";
+		String NL_MACOSX9 = "123 456\rAA AA\rBB BB";
+		String NL_WINDOWS = "123 456\r\nAA AA\r\nBB BB";
+		String NL_UNIX    = "123 456\nAA AA\nBB BB";
 		test_nextLine($(NL_MACOSX9));
 		test_nextLine($(NL_WINDOWS));
 		test_nextLine($(NL_UNIX));
 	}
+
+	@Test
+	public void test_nextLineFromMid() {
+		String NL_MACOSX9 = "123 456\r555 777\rAA AA\rBB BB";
+		String NL_WINDOWS = "123 456\r\n555 777\r\nAA AA\r\nBB BB";
+		String NL_UNIX    = "123 456\n555 777\nAA AA\nBB BB";
+		test_nextLineFromMid($(NL_MACOSX9));
+		test_nextLineFromMid($(NL_WINDOWS));
+		test_nextLineFromMid($(NL_UNIX));
+	}	
 
 }
