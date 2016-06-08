@@ -13,8 +13,8 @@ public class MyMapTest {
 
 	@Test
 	public void testPutGet() {
-		Map<Integer, Integer> myMap = new MyMap<>(N);
-		Map<Integer, Integer> control = new HashMap<>(N);
+		Map<Integer, Integer> myMap = new MyMap<>();
+		Map<Integer, Integer> control = new HashMap<>();
 		for (int i = 0; i < N; i++) {
 			int k = random.nextInt();
 			int v = random.nextInt();
@@ -30,8 +30,8 @@ public class MyMapTest {
 
 	@Test
 	public void testPutRemoveGet() {
-		Map<Integer, Integer> myMap = new MyMap<>(N);
-		Map<Integer, Integer> control = new HashMap<>(N);
+		Map<Integer, Integer> myMap = new MyMap<>();
+		Map<Integer, Integer> control = new HashMap<>();
 		for (int i = 0; i < N; i++) {
 			int k = random.nextInt();
 			int v = random.nextInt();
@@ -48,6 +48,7 @@ public class MyMapTest {
 			control.remove(k);
 			myMap.remove(k);
 		}
+		assertEquals(myMap.size(), control.size());
 		for (int k : control.keySet()) {
 			assertEquals(myMap.get(k), control.get(k));
 			int r = random.nextInt();

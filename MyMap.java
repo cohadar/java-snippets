@@ -54,6 +54,7 @@ public class MyMap<K, V> implements Map<K, V>{
 	}
 
 	private int size;
+	private int treshold;
 	private final float loadFactor = 0.75f;
 
 
@@ -114,13 +115,49 @@ public class MyMap<K, V> implements Map<K, V>{
 				return e.setValue(value);
 			}			
 		}	
+		size++;
 		Node<K, V> e = new Node<>(hash(key), key, value, null);	
 		if (p == null) {
 			data[index(h)] = e;
 		} else {
 			p.next = e;
 		}
+		if (size > loadFactor * data.length && data.length < MAX_TABLE_SIZE) {
+			resize();
+		}
 		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	private void resize() {
+		Node<K, V>[] data2 = new Node[data.length * 2];
+		for (int i = 0; i < data.length; i++) {
+			Node<K, V> at = null, bt = null;
+			for (Node<K, V> e = data[i]; e != null; e = e.next) {
+				int i2 = e.h & (data2.length - 1);
+				if (i == i2) {
+					if (at == null) {
+						data2[i] = at = e;
+					} else {
+						at = at.next = e;
+					}
+				} else {
+					if (bt == null) {
+						data2[i2] = bt = e;
+					} else {
+						bt = bt.next = e;
+					}					
+				}
+			}
+			if (at != null) {
+				at.next = null;
+			}
+			if (bt != null) {
+				bt.next = null;
+			}
+			data[i] = null;
+		}
+		data = data2;
 	}
 
 	public V remove(Object key) {
@@ -135,6 +172,7 @@ public class MyMap<K, V> implements Map<K, V>{
 				} else {
 					p.next = e.next;	
 				}
+				size--;
 				return ret;
 			}
 		}
