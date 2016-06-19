@@ -92,5 +92,26 @@ public class BitTest {
 		}
 	}
 
+	public static int lowestOneBit(int x) {
+		return x & ~(x-1);
+	}
+
+	@Test
+	public void testLowestOneBit() {
+		for (int i = 0; i < 10000; i++) {
+			Integer x = random.nextInt();
+			assertEquals(Integer.lowestOneBit(x), lowestOneBit(x));
+		}
+	}
+
+	@Test
+	public void testComplement2Negative() {
+		for (int i = 0; i < 10000; i++) {
+			int x = random.nextInt();
+			assertEquals(-x, ~x + 1);
+			assertEquals(-x, ~(x - 1));
+		}
+	}
+
 	public static Random random = new Random();
 }
