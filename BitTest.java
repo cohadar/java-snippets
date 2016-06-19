@@ -49,5 +49,18 @@ public class BitTest {
 		}
 	}
 
+	public static int compare(int x, int y) {
+		return (x < y) ? -1 : (x > y) ? 1 : 0;
+	}
+
+	@Test
+	public void testCompareTo() {
+		for (int i = 0; i < 10000; i++) {
+			Integer x = random.nextInt();
+			Integer y = random.nextInt();
+			assertEquals(x.compareTo(y), compare(x, y));
+		}
+	}
+
 	public static Random random = new Random();
 }
