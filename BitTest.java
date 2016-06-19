@@ -184,5 +184,33 @@ public class BitTest {
 		}
 	}
 
+	public static int reverseFor(int x) {
+		int r = 0;
+		for (int i = 0; i < 32; i++) {
+			r >>>= 1;
+			r |= (x & Integer.MIN_VALUE);
+			x <<= 1;
+		}
+		return r;
+	}
+
+	public static int reverse(int x) {
+		x = ((x & 0xAAAAAAAA) >>> 1)  | ((x & 0x55555555) << 1);
+		x = ((x & 0xCCCCCCCC) >>> 2)  | ((x & 0x33333333) << 2);
+		x = ((x & 0xF0F0F0F0) >>> 4)  | ((x & 0x0F0F0F0F) << 4);
+		x = ((x & 0xFF00FF00) >>> 8)  | ((x & 0x00FF00FF) << 8);
+		x = (x >>> 16) | (x << 16);
+		return x;
+	}
+
+	@Test
+	public void testReverse() {
+		for (int i = 0; i < 10000; i++) {
+			int x = random.nextInt();
+			assertEquals(Integer.reverse(x), reverseFor(x));
+			assertEquals(Integer.reverse(x), reverse(x));
+		}
+	}
+
 	public static Random random = new Random();
 }
