@@ -212,5 +212,18 @@ public class BitTest {
 		}
 	}
 
+	public static int reverseBytes(int x) {
+		x = ((x & 0xFF00FF00) >>> 8) | ((x & 0x00FF00FF) << 8);
+		return (x << 16) | (x >>> 16);
+	}
+
+	@Test
+	public void testReverseBytes() {
+		for (int i = 0; i < 10000; i++) {
+			int x = random.nextInt();
+			assertEquals(Integer.reverseBytes(x), reverseBytes(x));
+		}
+	}
+
 	public static Random random = new Random();
 }
