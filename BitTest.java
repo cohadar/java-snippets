@@ -229,12 +229,17 @@ public class BitTest {
 		return (x << shift) | (x >>> -shift);
 	}
 
+	public static int rotateRight(int x, int shift) {
+		return (x >>> shift) | (x << -shift);
+	}
+
 	@Test
-	public void testRotateLeft() {
+	public void testRotateLeftAndRigth() {
 		for (int i = 0; i < 10000; i++) {
 			int x = random.nextInt();
 			int shift = random.nextInt(100);
 			assertEquals(Integer.rotateLeft(x, shift), rotateLeft(x, shift));
+			assertEquals(Integer.rotateRight(x, shift), rotateRight(x, shift));
 		}
 	}
 
