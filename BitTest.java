@@ -113,5 +113,40 @@ public class BitTest {
 		}
 	}
 
+	public static int numberOfLeadingZeros(int x) {
+		int n = 0;
+		if (x == 0) {
+			return 32;
+		}
+		if ((x & 0xFFFF0000) == 0) {
+			n += 16;
+			x <<= 16;
+		}
+		if ((x & 0xFF000000) == 0) {
+			n += 8;
+			x <<= 8;
+		}
+		if ((x & 0xF0000000) == 0) {
+			n += 4;
+			x <<= 4;
+		}
+		if ((x & 0xC0000000) == 0) {
+			n += 2;
+			x <<= 2;
+		}
+		if (x >= 0) {
+			n++;
+		}
+		return n;		
+	}
+
+	@Test
+	public void testNumberOfLeadingZeros() {
+		for (int i = 0; i < 10000; i++) {
+			int x = random.nextInt();
+			assertEquals(Integer.numberOfLeadingZeros(x), numberOfLeadingZeros(x));
+		}
+	}
+
 	public static Random random = new Random();
 }
