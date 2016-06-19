@@ -225,5 +225,18 @@ public class BitTest {
 		}
 	}
 
+	public static int rotateLeft(int x, int shift) {
+		return (x << shift) | (x >>> -shift);
+	}
+
+	@Test
+	public void testRotateLeft() {
+		for (int i = 0; i < 10000; i++) {
+			int x = random.nextInt();
+			int shift = random.nextInt(100);
+			assertEquals(Integer.rotateLeft(x, shift), rotateLeft(x, shift));
+		}
+	}
+
 	public static Random random = new Random();
 }
