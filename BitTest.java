@@ -148,5 +148,41 @@ public class BitTest {
 		}
 	}
 
+	public static int numberOfTrailingZeros(int x) {
+		if (x == 0) {
+			return 32;
+		}
+		int n = 0;
+		if ((x << 16) == 0) {
+			x >>>= 16;
+			n += 16;
+		}
+		if ((x << 24) == 0) {
+			x >>>= 8;
+			n += 8;
+		}
+		if ((x << 28) == 0) {
+			x >>>= 4;
+			n += 4;
+		}
+		if ((x << 30) == 0) {
+			x >>>= 2;
+			n += 2;
+		}
+		if ((x << 31) == 0) {
+			x >>>= 1;
+			n += 1;
+		}
+		return n;
+	}
+
+	@Test
+	public void testNumberOfTrailingZeros() {
+		for (int i = 0; i < 10000; i++) {
+			int x = random.nextInt();
+			assertEquals(Integer.numberOfTrailingZeros(x), numberOfTrailingZeros(x));
+		}
+	}
+
 	public static Random random = new Random();
 }
